@@ -57,7 +57,7 @@ var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		buf.Reset(file.contents)
 	}
 
-	http.ServeContent(w, r, path.Base(p), ModTime, buf)
+	http.ServeContent(w, r, path.Base(p), modTime, buf)
 })
 
 // Handler returns handler for all embedded files.
