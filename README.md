@@ -1,4 +1,4 @@
-# gogenstatic
+# gogenstatic [![Build Status](https://travis-ci.org/mxmCherry/gogenstatic.svg?branch=master)](https://travis-ci.org/mxmCherry/gogenstatic)
 
 Command gogenstatic generates "static" package, which embeds all the files from public root dir ("--src" param, defaults to "./public") and provides HTTP handler to serve them.
 
