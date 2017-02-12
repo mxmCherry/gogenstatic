@@ -2,6 +2,12 @@
 
 Command gogenstatic generates "static" package, which embeds all the files from public root dir ("--src" param, defaults to "./public") and provides HTTP handler to serve them.
 
+Go get it:
+
+```bash
+go get -u github.com/mxmCherry/gogenstatic
+```
+
 # Usage
 
 ```bash
