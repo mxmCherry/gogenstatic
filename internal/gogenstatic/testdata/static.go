@@ -66,8 +66,8 @@ func Handler() http.Handler {
 }
 
 // HandlerFor returns static file handler for specified normalized path.
-func HandlerFor(path string) http.Handler {
-	f, ok := files[path]
+func HandlerFor(filePath string) http.Handler {
+	f, ok := files[path.Join("/", filePath)]
 	if !ok {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			http.NotFound(w, r)

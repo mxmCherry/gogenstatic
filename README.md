@@ -8,7 +8,7 @@ Command gogenstatic generates "static" package, which embeds all the files from 
   gogenstatic --src=path/to/public/dir --dst=path/to/place/static/package
 ```
 
-It is intended to be used with [go generate](https://blog.golang.org/generate)
+It is intended to be used with [go generate](https://blog.golang.org/generate).
 
 Assuming, you have this project structure:
 
