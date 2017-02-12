@@ -64,15 +64,13 @@ func Generate(out io.Writer, src string) error {
 		}
 
 		rel := path.Clean(strings.TrimPrefix(filePath, src))
-
-		_, _ = io.WriteString(out, "\tfiles[")
-
 		_ = encoder.Encode(rel)
-		id := jsonBuf.Bytes()
+		key := jsonBuf.Bytes()
 		jsonBuf.Reset()
 
-		_, _ = out.Write(id[0 : len(id)-1])
-		_, _ = io.WriteString(out, "] = file{\n")
+		_, _ = io.WriteString(out, "\tfiles[")
+		_, _ = out.Write(key[0 : len(key)-1])
+		_, _ = io.WriteString(out, "] = &file{\n")
 		_, _ = io.WriteString(out, "\t\tcontents: []byte{\n")
 
 		for {
@@ -143,7 +141,7 @@ import (
 var modTime = time.Unix(%d, 0)
 
 // files hold static file index by normalized file path.
-var files map[string]file
+var files map[string]*file
 
 // readerPool is a pool for *bytes.Reader.
 var readerPool = sync.Pool{}
@@ -154,7 +152,7 @@ type file struct {
 }
 
 // ServeHTTP serves static file over HTTP.
-func (f file) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (f *file) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var buf *bytes.Reader
 	if v := readerPool.Get(); v == nil {
 		buf = bytes.NewReader(f.contents)
@@ -171,21 +169,13 @@ var handler = http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 	// normalize file path:
 	p := path.Join("/", r.URL.Path)
 
-	file, ok := files[p]
+	f, ok := files[p]
 	if !ok {
 		http.NotFound(w, r)
 		return
 	}
 
-	var buf *bytes.Reader
-	if v := readerPool.Get(); v == nil {
-		buf = bytes.NewReader(file.contents)
-	} else {
-		buf = v.(*bytes.Reader)
-		buf.Reset(file.contents)
-	}
-
-	http.ServeContent(w, r, path.Base(p), modTime, buf)
+	f.ServeHTTP(w, r)
 })
 
 // Handler returns handler for all embedded files.
@@ -206,7 +196,7 @@ func HandlerFor(filePath string) http.Handler {
 
 // init populates file index.
 func init() {
-	files = map[string]file{}
+	files = map[string]*file{}
 `
 
 const footer = `}
