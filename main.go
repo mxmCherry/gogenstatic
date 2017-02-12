@@ -15,12 +15,12 @@
 // Then you can add this comment:
 //   //go generate gogenstatic
 //
-// to any of your *.go files (whatever.go) and run:
+// to any of your *.go files (like whatever.go) and run:
 //   go generate ./...
 //
 // in your project dir,
-// and it'll generate `static` subpackage,
-// with all the files from `./public/` embedded:
+// and it'll generate "static" subpackage,
+// with all the files from "./public/" embedded:
 //   project/
 //     public/
 //     static/ # this will be generated from public/
